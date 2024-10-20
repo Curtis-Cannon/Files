@@ -1,0 +1,28 @@
+How to use Intune - Install Printer Scripts
+
+Please note this should always be test on a small group or 1 device to start off with to ensure the installation completes without issue
+
+1. Download the required drivers from manufacturers site and place in its own folder with a suitable name (preferably the driver name).
+if this is package make sure the extract this 1st
+2. Remove any unneeded files from the package (i.e. if installing a 64bit version remove the 32 bit folder from the package)
+3. Take a note of the following:
+	a. Printer name (the desired name of the printer to be installed)
+	b. Printer IP (The IP address of the printer you want to add)
+	c. DriverName (Pull the name of the driver from within the INF file you will be using)
+	d. INF Source (The file path to the .inf file you will be selecting)
+4. Edit the "Intune - Install Printer" script and adjust lines 2-5 with the relevant information collected in the previous step
+for the INFSource variable only use the path of the script from the start of the driver folder, remove the root of this as it will be detected automatically on the end user device
+5. Place the "Intune - Install Printer" into the driver folder
+6. Package the folder and contents using the Win32 App Prep Tool, selecting "Intune - Install Printer.ps1" as your source file
+7. Edit the "Intune - Printer Detection Script.ps1" script and adjust lines 2 and 3 with the relevant information collected in step 3
+8. Sign into the desired Intune portal and create a new Win32 App, select the newly create Intunewin package
+9. In the details page change the name to say something like "Install [Printer Name] Printer" and select next
+10. On the Program page change the install command to "%windir%\sysnative\windowspowershell\v1.0\powershell.exe -ExecutionPolicy Bypass -file ".\Intune - Install Printer.ps1""
+Copy and paste the same into the uninstall command as this should not be required
+Change 'Allow available uninstall' to No
+Select next
+11. on the requirements page set the OS architecture and minimum OS to desired options, select next
+12. In detection rules select use a custom detection script and then select "Intune - Printer Detection Script.ps1"
+Leave the following options as default
+13. In assignments select the target groups in the required or available for install sections and Select review and save and then save/create
+14. Monitor select ed devices to ensure that this has installed successfully
