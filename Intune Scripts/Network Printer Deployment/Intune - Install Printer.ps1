@@ -43,7 +43,3 @@ If ((Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) -ne $null){
 } Else {
     Exit 1
 }
-
-} Else {
-    Exit 1
-}
