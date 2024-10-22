@@ -1,8 +1,8 @@
 #Adjustable variables
-$DriverName = "Canon Generic Plus PCL6" #The Name of the printer driver listed in the INF file
+$DriverName = "Canon Generic PCL6 Driver" #The Name of the printer driver listed in the INF file
 $PrinterName = "Canon Test Printer" #The name that you want assigned to the created printer and port
 $PrinterIP = "10.0.0.10" #The IP address of the printer in question
-$INFSource = $PSScriptRoot + "\x64\Driver\CNP60MA64.INF" #The Location of the INF file for your printer drivers (leave PSScriptRoot as it is)
+$INFSource = "C:\Temp\Test Printer\GPCL6_Driver_V311_W64_00\Driver\CNP60MA64.INF" #The Location of the INF file for your printer drivers (leave PSScriptRoot as it is)
 
 #Start logging actions
 Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PrinterName) Deployment.log" -Force -Verbose
@@ -10,11 +10,11 @@ Start-Transcript -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\
 #Add printer to driver store and collect published name
 $PNPOutput = pnputil -a $INFSource| Select-String "Published Name"
 $null = $pnpOutput -match "Published name :\s*(?<name>.*\.inf)" 
-$driverINF = Get-ChildItem -Path C:\Windows\INF\$($matches.Name)
+$driverINF = "C:\Windows\INF\$($matches.Name)"
 Write-Output "Driver added to driver store successfully"
 
 #Add printer driver from driver store
-Add-PrinterDriver -Name $DriverName -InfPath $driverinf.FullName
+Add-PrinterDriver -Name $DriverName -InfPath $driverinf
 Write-Output "Driver added to printer drivers successfully"
 
 #Add Printer port using information provided
@@ -40,6 +40,10 @@ Stop-Transcript
 If ((Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) -ne $null){
     New-Item -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PrinterName) Deployment Successful.log"
     Exit 0
+} Else {
+    Exit 1
+}
+
 } Else {
     Exit 1
 }
