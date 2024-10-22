@@ -2,7 +2,7 @@
 $DriverName = "Canon Generic PCL6 Driver" #The Name of the printer driver listed in the INF file
 $PrinterName = "Canon Test Printer" #The name that you want assigned to the created printer and port
 $PrinterIP = "10.0.0.10" #The IP address of the printer in question
-$INFSource = "C:\Temp\Test Printer\GPCL6_Driver_V311_W64_00\Driver\CNP60MA64.INF" #The Location of the INF file for your printer drivers (leave PSScriptRoot as it is)
+$INFSource = $PSScriptRoot + "\x64\Driver\CNP60MA64.INF" #The Location of the INF file for your printer drivers (leave PSScriptRoot as it is)
 
 #Add printer to driver store and collect published name
 $PNPOutput = pnputil -a $INFSource| Select-String "Published Name"
