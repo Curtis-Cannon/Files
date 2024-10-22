@@ -35,3 +35,11 @@ If ((Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) -eq $null){
 
 #Stop Logging
 Stop-Transcript
+
+#Create File t show successful deployment
+If ((Get-Printer -Name $PrinterName -ErrorAction SilentlyContinue) -ne $null){
+    New-Item -Path "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\$($PrinterName) Deployment Successful.log"
+    Exit 0
+} Else {
+    Exit 1
+}
